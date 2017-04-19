@@ -27,38 +27,15 @@ byte ledVal = 0;
 
 void receiveEvent (int howMany)
 {
- 
- // we are expecting 2 bytes, so check we got them
- if (howMany == 2)
- {
-   int result;
- 
-   // starts ADC measuremrnt
-   Serial.println("Acqiring");
-   for(int j=0;j<block;j++)
-   {
-       for(int i=0;i<ndata;i++)
-        {
-          adc.waitDRDY();
-          data[j][i] = adc.readCurrentChannel();
-          //data[j][i] = i+(8*j);
-        }
-   }
-
-
-  for(int j=0;j<block;j++)
+  switch(howMany)
   {
-   // Debuging ADC reading
-     for(int i=0;i<ndata;i++)
-     {
-       //Serial.println(data[j][i]);
-     }
+    case 2:
+       Serial.println("Acqiring");
+       measure();
+       printData();
+       digitalWrite (LED, ledVal ^= 1);   // flash the LED
+      break;
   }
-  
-    
-   digitalWrite (LED, ledVal ^= 1);   // flash the LED
-     
- }  // end if 2 bytes were sent to us
 
   // throw away any I2C garbage
   while (Wire.available () > 0) 
@@ -68,9 +45,39 @@ void receiveEvent (int howMany)
 
 void requestEvent()
 {
+  //Serial.println("Sending");
   Wire.write((byte *) &data[index], 4*ndata);
+  updateBlockIndex();
+}
+
+void measure()
+{
+  for(int j=0;j<block;j++)
+   {
+       for(int i=0;i<ndata;i++)
+        {
+          adc.waitDRDY();
+          data[j][i] = adc.readCurrentChannel();
+        }
+   }
+}
+
+void updateBlockIndex()
+{
   index++;
   if(index>(block-1))index = 0;
+}
+
+void printData()
+{
+    for(int j=0;j<block;j++)
+  {
+   // Debuging ADC reading
+     for(int i=0;i<ndata;i++)
+     {
+       //Serial.println(data[j][i]);
+     }
+  }
 }
 
 void long2byte(int32_t bigNum, byte (& bytes) [4])
