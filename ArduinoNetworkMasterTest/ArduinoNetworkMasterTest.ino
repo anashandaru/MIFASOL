@@ -17,22 +17,35 @@ void setup ()
 
 void loop() 
 {
+  measureSimultaneously();
+      
+  delay (1000);  // wait 7 seconds
+
+  requestDataFrom(SLAVE_ADDRESS);
+  printData();
+
+  delay(1000);
+}   // end of loop
+
+void measureSimultaneously()
+{
   unsigned int value = 1234;  // ie. 0x04 0xD2
 
-  Serial.println("broadcasting");
+  //Serial.println("broadcasting");
   Wire.beginTransmission (0);  // broadcast to all
   Wire.write (highByte (value));   
   Wire.write (lowByte (value)); 
   byte err = Wire.endTransmission  ();  // non-zero means error
-  Serial.println(err);
-      
-  delay (1000);  // wait 7 seconds
+  //Serial.println(err);
+}
 
-  Serial.println("Requesting");
-
+void requestDataFrom(byte slaveAddress)
+{
+  //Serial.print("Requesting : ");
+  //Serial.println(slaveAddress);
   for(int j=0;j<block;j++)
   {
-    Wire.requestFrom(45,4*ndata);
+    Wire.requestFrom(slaveAddress,4*ndata);
     while(Wire.available())
     {
       for(int i=0;i<ndata;i++)
@@ -43,15 +56,15 @@ void loop()
       }
     }    
   }
-    
+}
 
+void printData()
+{
   for(int i=0;i<ndata*block;i++)
   {
     Serial.println(data[i]);
   }
-
-  delay(1000);
-}   // end of loop
+}
 
 long byte2long(byte bytes[4])
 {
