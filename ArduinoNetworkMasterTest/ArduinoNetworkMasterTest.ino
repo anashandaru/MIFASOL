@@ -4,7 +4,8 @@
 #include <Wire.h>
 
 const byte MY_ADDRESS = 25;      // me
-const byte SLAVE_ADDRESS = 45;   // slave
+const byte SLAVE1 = 45;   // slave one
+const byte SLAVE2 = 35;   // slave one
 const int ndata = 8;
 const int block = 30;
 long data[ndata*block];
@@ -21,8 +22,12 @@ void loop()
       
   delay (1000);  // wait 7 seconds
 
-  requestDataFrom(SLAVE_ADDRESS);
+  requestDataFrom(SLAVE1);
   printData();
+  dataFlush();
+  requestDataFrom(SLAVE2);
+  printData();
+  dataFlush();
 
   delay(1000);
 }   // end of loop
@@ -31,7 +36,7 @@ void measureSimultaneously()
 {
   unsigned int value = 1234;  // ie. 0x04 0xD2
 
-  //Serial.println("broadcasting");
+  Serial.println("broadcasting");
   Wire.beginTransmission (0);  // broadcast to all
   Wire.write (highByte (value));   
   Wire.write (lowByte (value)); 
@@ -41,8 +46,8 @@ void measureSimultaneously()
 
 void requestDataFrom(byte slaveAddress)
 {
-  //Serial.print("Requesting : ");
-  //Serial.println(slaveAddress);
+  Serial.print("Requesting : ");
+  Serial.println(slaveAddress);
   for(int j=0;j<block;j++)
   {
     Wire.requestFrom(slaveAddress,4*ndata);
@@ -56,6 +61,14 @@ void requestDataFrom(byte slaveAddress)
       }
     }    
   }
+}
+
+void dataFlush()
+{
+  for(int i=0;i<ndata*block;i++)
+  {
+    data[i] = 0.0;
+  }  
 }
 
 void printData()
