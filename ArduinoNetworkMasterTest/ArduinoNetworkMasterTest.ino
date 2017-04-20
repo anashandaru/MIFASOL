@@ -21,10 +21,11 @@ void loop()
   measureSimultaneously();
       
   delay (1000);  // wait 7 seconds
-
+  i2cFlush();
   requestDataFrom(SLAVE1);
   printData();
   dataFlush();
+  i2cFlush();
   requestDataFrom(SLAVE2);
   printData();
   dataFlush();
@@ -69,6 +70,14 @@ void dataFlush()
   {
     data[i] = 0.0;
   }  
+}
+
+void i2cFlush()
+{
+  while(Wire.available())
+  {
+    Wire.read();
+  }
 }
 
 void printData()
