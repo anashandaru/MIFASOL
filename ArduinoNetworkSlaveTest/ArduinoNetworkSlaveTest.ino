@@ -32,6 +32,7 @@ void receiveEvent (int howMany)
     case 2:
        Serial.println("Acqiring");
        measure();
+       //samplingCheck();
        printData();
        digitalWrite (LED, ledVal ^= 1);   // flash the LED
       break;
@@ -60,6 +61,17 @@ void measure()
           data[j][i] = adc.readCurrentChannel();
         }
    }
+}
+
+void samplingCheck()
+{
+  long startTime, duration;
+  
+  startTime = millis();
+  measure();
+  duration = millis() - startTime;
+  float samplingRate = (ndata*block)/duration;
+  Serial.println(duration);
 }
 
 void updateBlockIndex()
