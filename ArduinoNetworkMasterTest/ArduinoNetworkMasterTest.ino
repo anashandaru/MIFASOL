@@ -37,7 +37,7 @@ void measureSimultaneously()
 {
   unsigned int value = 1234;  // ie. 0x04 0xD2
 
-  Serial.println("broadcasting");
+  //Serial.println("broadcasting");
   Wire.beginTransmission (0);  // broadcast to all
   Wire.write (highByte (value));   
   Wire.write (lowByte (value)); 
@@ -47,8 +47,8 @@ void measureSimultaneously()
 
 void requestDataFrom(byte slaveAddress)
 {
-  Serial.print("Requesting : ");
-  Serial.println(slaveAddress);
+  //Serial.print("Requesting : ");
+  //Serial.println(slaveAddress);
   for(int j=0;j<block;j++)
   {
     Wire.requestFrom(slaveAddress,4*ndata);
