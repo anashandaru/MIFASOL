@@ -2,11 +2,11 @@
 #include <ADS1256.h>
 #include<SPI.h>
 
-const int ndata = 64;
-long data[ndata];
+const int ndata = 10000;
+long data;
 
 uint16_t page1 = 0;
-
+uint8_t offset = 0;
 
 const byte Drdy = 9;
 const byte Cs = 8;
@@ -21,7 +21,7 @@ void setup() {
   Serial.begin(115200);
   while (!Serial) ;
 
-  adc.start(ADS1256_DRATE_3750SPS);
+  adc.start(ADS1256_DRATE_7500SPS);
   adc.switchChannel(0,1); 
   flash.begin();
 }
@@ -29,39 +29,39 @@ void setup() {
 void loop() {
   
   long timeStart = millis();
-  for(int i;i<ndata;i++)
+  for(unsigned int i;i<ndata;i++)
   {
     SPI.setDataMode(SPI_MODE1);
     adc.waitDRDY();
-    data[i]=adc.readCurrentChannel();
+    data=adc.readCurrentChannel();
 
     SPI.setDataMode(SPI_MODE0);
-    flash.writeLong(page1, 4*i, data[i],NOERRCHK);
+    page1 = (4*i)/256;
+    offset = (4*i)%256;
+    flash.writeLong(page1, offset, data,NOERRCHK);
   }
   long duration = millis() - timeStart;
-  Serial.println(64000/duration);
+  Serial.println((float)ndata/duration*1000);
 
   Serial.println(" Saved!");
 
-  for(int i;i<ndata;i++)
+  for(unsigned int i;i<ndata;i++)
   {
-    data[i]=0;
+    data=0;
   }
   Serial.println("Local values set to 0");
 
-  for(int i;i<ndata;i++)
+  for(unsigned int i;i<ndata;i++)
   {
-    flash.readAnything(page1, 4*i, data[i]);
-  }
-  
-  flash.eraseSector(page1, 0);
-  
-  Serial.println("After reading");
-  for(int i;i<ndata;i++)
-  {
-    Serial.print(data[i]);
+    page1 = (4*i)/256;
+    offset = (4*i)%256;
+    flash.readAnything(page1, offset, data);
+    Serial.print(data);
     Serial.print("|");
   }
+
+  flash.eraseChip();
+  
   Serial.println("Continue");
   delay(1000);
 }
