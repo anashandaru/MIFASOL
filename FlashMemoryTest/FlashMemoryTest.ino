@@ -8,21 +8,22 @@ long data;
 uint16_t page1 = 0;
 uint8_t offset = 0;
 
-const byte Drdy = 9;
-const byte Cs = 8;
-const byte Rst = 7;
+//const byte Drdy = 9;
+//const byte Cs = 8;
+//const byte Rst = 7;
 const float clockMHz = 7.68;
 
 SPIFlash flash(5);
-ADS1256 adc(clockMHz,Drdy,Cs,Rst,2.5);
+//ADS1256 adc(clockMHz,Drdy,Cs,Rst,2.5);
+ADS1256 adc(clockMHz,2.5,true);
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
   while (!Serial) ;
 
-  adc.start(ADS1256_DRATE_7500SPS);
-  adc.switchChannel(0,1); 
+  adc.begin(ADS1256_DRATE_3750SPS,ADS1256_GAIN_1,false);
+  adc.setChannel(0,1); 
   flash.begin();
 }
 
@@ -33,7 +34,7 @@ void loop() {
   {
     SPI.setDataMode(SPI_MODE1);
     adc.waitDRDY();
-    data=adc.readCurrentChannel();
+    data=adc.readChannel();
 
     SPI.setDataMode(SPI_MODE0);
     page1 = (4*i)/256;

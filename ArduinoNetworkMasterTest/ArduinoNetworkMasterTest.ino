@@ -25,10 +25,10 @@ void loop()
   requestDataFrom(SLAVE1);
   printData();
   dataFlush();
-  i2cFlush();
-  requestDataFrom(SLAVE2);
-  printData();
-  dataFlush();
+//  i2cFlush();
+//  requestDataFrom(SLAVE2);
+//  printData();
+//  dataFlush();
 
   delay(1000);
 }   // end of loop
