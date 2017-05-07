@@ -1,0 +1,3 @@
+[submodule "spectragama2/SPECTRAGAMA-ESSENTIAL"]
+	path = spectragama2/SPECTRAGAMA-ESSENTIAL
+	url = https://github.com/UGM-Geofisika/SPECTRAGAMA-ESSENTIAL.git
