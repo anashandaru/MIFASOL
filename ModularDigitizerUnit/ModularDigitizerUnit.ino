@@ -11,7 +11,7 @@ const float clockMHz = 7.68;
 ADS1256 adc(clockMHz,2.5,true);
 
 // Data Buffer Variables
-int ndata = 240;
+volatile uint16_t ndata = 240;
 long wireBuffer[8];
 volatile int stepIndex = 0;
 
@@ -29,12 +29,12 @@ void setup() {
     TWAR = (myAddress << 1) | 1; // enable I2C broadcast to be receive
     Wire.onReceive(receiveEvent); // set up receive handler
     Wire.onRequest(requestEvent); // set up request handler
-
+    
     // ADC (ADS1256) setup
-    adc.begin(ADS1256_DRATE_3750SPS,ADS1256_GAIN_1,false);
+    adc.begin(ADS1256_DRATE_3750SPS,ADS1256_GAIN_1,true);
     adc.setChannel(0,1); // set input channel positive to pin 0 and negative to pin 1
     Serial.println("ADC started");
-
+    
     // Winbond flash memory setup
     flash.begin();
     Serial.println("Flash started");
@@ -45,16 +45,22 @@ void receiveEvent(int howMany)
 {
 	switch(howMany)
 	{
+
+    case 1:
+        Wire.read();
+        flash.eraseChip();
+        Serial.println("Memory Erased");
+      break;
+      
 		case 2:
-      ndata = Wire.read();
-      ndata <<= 8;
-      ndata |= Wire.read();
-      Serial.print("Set npts to ");
-      Serial.println(ndata);
-		  Serial.println("Acquiring Data ...");
-      flash.eraseChip();
-			measure();
-			resetStepIndex();
+        Serial.println("Acquiring Data ...");
+        ndata = Wire.read();
+        ndata <<= 8;
+        ndata |= Wire.read();
+        Serial.print("Set npts to ");
+        Serial.println(ndata);
+  			measure();
+  			resetStepIndex();
 		  break;
 	}
 
@@ -117,7 +123,12 @@ void store(int dataIndex, long data)
 void updateStepIndex()
 {
 	stepIndex++;
-	if(stepIndex > (ndata/8 - 1)) stepIndex = 0;
+	if(stepIndex > (ndata/8 - 1)) 
+	{
+	  stepIndex = 0;
+    Wire.flush();
+    wireFlush();
+	}
 }
 
 void resetStepIndex()
