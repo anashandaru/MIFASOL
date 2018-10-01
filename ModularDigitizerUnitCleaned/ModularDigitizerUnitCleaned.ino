@@ -4,7 +4,7 @@
 #include <SPIFlash.h>
 
 // Wire variables
-const byte myAddress = 43;
+const byte myAddress = 11;
 
 // ADC variables
 const float clockMHz = 7.68;
@@ -16,7 +16,7 @@ long wireBuffer[8];
 volatile int stepIndex = 0;
 
 // Flash Memory Variables
-const byte flashCs = 5; //change to 10
+const byte flashCs = 10; //change to 10
 SPIFlash flash(flashCs);
 
 // Digital Potentiometer variables
@@ -24,10 +24,16 @@ const int increment = 6;
 const int updown = 4;
 const int cs = 10;
 
+// LED Indicator
+int rxLed = 17;
+int txLed = 30;
+
 void setup() {
     // For debugging purpose
-    Serial.begin(115200);
-    while (!Serial);
+    //Serial.begin(115200);
+    //while (!Serial);
+    pinMode(rxLed, OUTPUT);
+    pinMode(txLed, OUTPUT);
 
     // Digital Potentiometer Setup
     pinMode(increment, OUTPUT);
@@ -38,7 +44,7 @@ void setup() {
     digitalWrite(increment, HIGH);
     delayMicroseconds(600);
     ResetPot();
-    Serial.println("DigiPot Set And Reset");
+    //Serial.println("DigiPot Set And Reset");
     
     // I2C setup
     Wire.begin(myAddress); // initialize hardware register
@@ -49,11 +55,11 @@ void setup() {
     // ADC (ADS1256) setup
     adc.begin(ADS1256_DRATE_3750SPS,ADS1256_GAIN_2,true);
     adc.setChannel(0,1); // set input channel positive to pin 0 and negative to pin 1
-    Serial.println("ADC started");
+    //Serial.println("ADC started");
     
     // Winbond flash memory setup
     flash.begin();
-    Serial.println("Flash started");
+    //Serial.println("Flash started");
 }
 
 
@@ -62,33 +68,39 @@ void receiveEvent(int howMany)
 	switch(howMany)
 	{
 
+    // Erase flash memory
     case 1:
         Wire.read();
+        digitalWrite(rxLed,LOW);
         flash.eraseChip();
-        Serial.println("Memory Erased");
+        digitalWrite(rxLed,HIGH);
+
+        //Serial.println("Memory Erased");
       break;
-      
+
+    // Measure and start ADC sampling
 		case 2:
-        Serial.println("Acquiring Data ...");
+        //Serial.println("Acquiring Data ...");
         ndata = Wire.read();
         ndata <<= 8;
         ndata |= Wire.read();
-        Serial.print("Set npts to ");
-        Serial.println(ndata);
+        //Serial.print("Set npts to ");
+        //Serial.println(ndata);
+        digitalWrite(rxLed,LOW);
   			measure();
+        digitalWrite(rxLed,HIGH);
   			resetStepIndex();
 		  break;
 
     case 3:
-        Serial.print("Setting Pot to ...");
+        //Serial.print("Setting Gain ");
         int wiper;
         wiper = Wire.read();
         wiper <<= 8;
         wiper |= Wire.read();
         Wire.read();
-        Serial.println(wiper);
-        ResetPot();
-        SetGain(wiper);
+        SetGainAdc(wiper);
+        //Serial.println(wiper);
       break;
 	}
 
@@ -98,20 +110,22 @@ void receiveEvent(int howMany)
 
 void requestEvent()
 {
+  digitalWrite(rxLed,LOW);
 	// Read data packet (consist of 8 samples) from flash memory and fill it in I2C buffer
-	Serial.print("Read data from memory - ");
+	//Serial.print("Read data from memory - ");
 	for (int i = 0; i < 8; ++i)
 	{
 		wireBuffer[i] = readFlash(i+stepIndex*8);
 	}
 
 	// Send data packet in I2C buffer over I2C Wire
-	Serial.print("Sending data ");
+	//Serial.print("Sending data ");
 	Wire.write((byte *) &wireBuffer, 4*8);
   
 	// update stepindex for next data packet
-	Serial.println(stepIndex);
+	//Serial.println(stepIndex);
 	updateStepIndex();
+  digitalWrite(rxLed,HIGH);
 }
 
 void ResetPot()
@@ -125,6 +139,46 @@ void SetGain(int wiper)
     SetPot(wiper*-1,false);
   else
     SetPot(wiper,true);
+}
+
+void SetGainAdc(int gain)
+{
+  switch(gain)
+  {
+
+    // Erase flash memory
+    case 1:
+    adc.setGain(ADS1256_GAIN_1);
+      break;
+
+    case 2:
+    adc.setGain(ADS1256_GAIN_2);
+      break;
+
+    case 4:
+    adc.setGain(ADS1256_GAIN_4);
+      break;
+      
+    case 8:
+    adc.setGain(ADS1256_GAIN_8);
+      break;
+      
+    case 16:
+    adc.setGain(ADS1256_GAIN_16);
+      break;
+      
+    case 32:
+    adc.setGain(ADS1256_GAIN_32);
+      break;
+      
+    case 64:
+    adc.setGain(ADS1256_GAIN_64);
+      break;
+
+    case 128:
+    adc.setGain(ADS1256_GAIN_128);
+      break;
+  }
 }
 
 void SetPot(int increment, bool up)

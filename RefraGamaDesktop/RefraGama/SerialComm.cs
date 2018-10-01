@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using CommandMessenger;
 using CommandMessenger.Transport.Serial;
@@ -54,7 +55,7 @@ namespace RefraGama
             // Create Serial Port object
             _serialTransport = new SerialTransport
             {
-                CurrentSerialSettings = { PortName = "COM13", BaudRate = 115200, DtrEnable = false} // object initializer
+                CurrentSerialSettings = { PortName = "COM3", BaudRate = 115200, DtrEnable = true} // object initializer
             };
 
             // Initialize the command messenger with the Serial Port transport layer
@@ -107,15 +108,17 @@ namespace RefraGama
             _cmdMessenger.SendCommand(command);
         }
 
-        public void SetGain(int gain)
+        public void SetGain(int address, int wiper)
         {
             var command = new SendCommand((int)Command.SetGain);
-            command.AddBinArgument((UInt16)gain);
+            command.AddBinArgument((UInt16)address);
+            command.AddBinArgument((Int16)wiper);
             _cmdMessenger.SendCommand(command);
         }
 
         public void ClearMemory()
         {
+            _form.CaptionWaitFor("Clearing Memory");
             var command = new SendCommand((int)Command.ClearMemory);
             _cmdMessenger.SendCommand(command);
         }
@@ -130,12 +133,15 @@ namespace RefraGama
 
         public void ArmTrigger()
         {
+            _form.CaptionWaitFor("Waiting For Trigger");
             var command = new SendCommand((int)Command.ArmTrigger);
             _cmdMessenger.SendCommand(command);
         }
 
         public void RequestData()
         {
+            _form.CaptionWaitFor("Transfering Data");
+
             while (_traces.Any())
             {
                 _traces.Clear();
@@ -163,14 +169,17 @@ namespace RefraGama
 
         private void OnTriggered(ReceivedCommand arguments)
         {
+            _form.CaptionWaitFor("Recording");
             IsTriggered = true;
+            Thread.Sleep(_form.RecordingTime + 100);
+            RequestData();
         }
 
         private void OnChannelFounded(ReceivedCommand arguments)
         {
             ChannelSearchCompleted = arguments.ReadBinBoolArg();
             if (ChannelSearchCompleted) return;
-            var channel = new Channels { Id = arguments.ReadBinUInt16Arg(), Channel = Channels.Count + 1 };
+            var channel = new Channels { Id = arguments.ReadBinUInt16Arg(), Channel = Channels.Count + 1 , Gain = 1};
             Channels.Add(channel);
         }
 
@@ -206,6 +215,7 @@ namespace RefraGama
                     _traceBuffer.Clear();
                 }
                 _currentChannel = currentChannel;
+                if(currentChannel != 0) _form.CaptionWaitFor("Transfering Data from " + currentChannel);
             }
 
             // Read data packet (consist of 8 samples)
@@ -213,9 +223,11 @@ namespace RefraGama
             {
                 var receiveValue = (float) arguments.ReadBinInt32Arg();
                 _traceBuffer.Add(receiveValue);
-                Debug.WriteLine(receiveValue);
+                //Debug.WriteLine(receiveValue);
             }
 
+            if (_traces.Count != _form.NumberOfChannels) return;
+            _form.CloseWaitForm();
         }
 
         private ISeismicStream GetStream()

@@ -104,7 +104,7 @@
             this.zoomTrackBarControl2.Name = "zoomTrackBarControl2";
             this.zoomTrackBarControl2.Properties.Maximum = 999;
             this.zoomTrackBarControl2.Properties.ScrollThumbStyle = DevExpress.XtraEditors.Repository.ScrollThumbStyle.ArrowDownRight;
-            this.zoomTrackBarControl2.Size = new System.Drawing.Size(193, 23);
+            this.zoomTrackBarControl2.Size = new System.Drawing.Size(194, 23);
             this.zoomTrackBarControl2.TabIndex = 0;
             this.zoomTrackBarControl2.ValueChanged += new System.EventHandler(this.zoomTrackBarControl2_ValueChanged);
             // 
@@ -155,7 +155,7 @@
             this.barDockControlTop.CausesValidation = false;
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
-            this.barDockControlTop.Size = new System.Drawing.Size(475, 24);
+            this.barDockControlTop.Size = new System.Drawing.Size(475, 28);
             // 
             // barDockControlBottom
             // 
@@ -168,15 +168,15 @@
             // 
             this.barDockControlLeft.CausesValidation = false;
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
-            this.barDockControlLeft.Location = new System.Drawing.Point(0, 24);
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 238);
+            this.barDockControlLeft.Location = new System.Drawing.Point(0, 28);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 234);
             // 
             // barDockControlRight
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(475, 24);
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 238);
+            this.barDockControlRight.Location = new System.Drawing.Point(475, 28);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 234);
             // 
             // barCheckItem1
             // 

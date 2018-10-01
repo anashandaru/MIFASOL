@@ -1,6 +1,6 @@
 ﻿namespace RefraGama
 {
-    public struct Channels
+    public class Channels
     {
         public int Id { get; set; }
         public int Channel { get; set; }

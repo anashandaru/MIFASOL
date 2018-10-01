@@ -3,6 +3,7 @@
 #include <Adafruit_ADS1015.h>
 
 // Trigger Variables
+const int buzzer = 9;
 int triggerThreshold = 0;
 Adafruit_ADS1015 ads;
 
@@ -20,16 +21,18 @@ const unsigned int samplingRate = 3750;
 void setup() {
   // For debugging purposes
   pinMode(13, OUTPUT);
+  pinMode(buzzer, OUTPUT);
   
   // SerialComm setup
   Serial.begin(115200);
-
+  while (!Serial);
   cmdMessenger.printLfCr();
 
   attachCommandCallBacks();
 
   // I2CComm setup
   Wire.begin(myAddress);
+  //Wire.onReceive(receiveEvent); // set up receive handler
 
   // Trigger setup
   ads.setGain(GAIN_SIXTEEN);
@@ -48,4 +51,13 @@ void loop() {
   cmdMessenger.feedinSerialData(); 
 }
 
+void buzzOn()
+{
+  digitalWrite(buzzer,HIGH);
+}
+
+void buzzOff()
+{
+  digitalWrite(buzzer,LOW);
+}
 

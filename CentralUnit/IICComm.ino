@@ -1,3 +1,20 @@
+void receiveEvent(int howMany)
+{
+  Serial.print("FIRED");
+  switch(howMany)
+  {
+    case 1:
+      int channelId;
+      channelId = Wire.read();
+      Serial.print(channelId);
+      Serial.println(" deleted");
+      break;
+  }
+
+  // throw away any I2C garbage
+  wireFlush();
+}
+
 void measureSimul()
 {
   Wire.flush();
@@ -7,12 +24,25 @@ void measureSimul()
 	byte err = Wire.endTransmission(); // non-zero means error
 }
 
+void SetGain(uint8_t address, int wiper)
+{
+  Wire.flush();
+  Wire.beginTransmission(address);
+  Wire.write(highByte(wiper));
+  Wire.write(lowByte(wiper));
+  Wire.write(highByte(wiper)); // Meaningless
+  byte err = Wire.endTransmission();
+}
+
 void clearMemory()
 {
   Wire.flush();
   Wire.beginTransmission(0); // broadcast to all modular unit
   Wire.write(highByte(ndata));
   byte err = Wire.endTransmission(); // non-zero means error
+
+    while(Wire.available())
+    Serial.println(Wire.read());
 }
 
 void requestDataFrom(byte slaveAddress)

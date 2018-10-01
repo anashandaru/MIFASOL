@@ -1,19 +1,19 @@
 // Command list
 enum
 {
-    kCommTest, // send command to test the communication between central unit and computer
-    kCommReport, // receive command report from the central unit
-    kChannelSearch, // send command to search all available channel
-    kChannelFounded, // receive information about all availabel channel
-    kSetNumOfSample, // send command to set recording time
-    kSetSamplingRate, // send command to set sampling rate
-    kSetGain, // send command to set gain
-    kClearMemory, // send command to clear flash memory
-    kSetTriggerSensitivity, // send command to trigger sensitivity
-    kArmTrigger, // send command to arm trigger
-    kTriggered, // received if the instrument has been triggered
-    kRequestData, // send command to receive data
-    kReceiveData, // receive data from central unit
+    kCommTest, // 0. send command to test the communication between central unit and computer
+    kCommReport, // 1. receive command report from the central unit
+    kChannelSearch, // 2. send command to search all available channel
+    kChannelFounded, // 3. receive information about all availabel channel
+    kSetNumOfSample, // 4. send command to set recording time
+    kSetSamplingRate, // 5. send command to set sampling rate
+    kSetGain, // 6. send command to set gain
+    kClearMemory, // 7. send command to clear flash memory
+    kSetTriggerSensitivity, // 8. send command to trigger sensitivity
+    kArmTrigger, // 9. send command to arm trigger
+    kTriggered, // 10. received if the instrument has been triggered
+    kRequestData, // 11. send command to receive data
+    kReceiveData, // 12. receive data from central unit
 };
 
 void attachCommandCallBacks()
@@ -72,7 +72,11 @@ void OnSetSamplingRate()
 {}
 
 void OnSetGain()
-{}
+{
+  uint8_t address = (uint8_t) cmdMessenger.readBinArg<uint16_t>();
+  int wiper = cmdMessenger.readBinArg<int16_t>();
+  SetGain(address, wiper);
+}
 
 void OnClearMemory()
 {
@@ -87,7 +91,7 @@ void OnSetTriggerSensitivity()
 void OnArmTrigger()
 {
   WaitingForTrigger();
-  digitalWrite(13, HIGH);
+  //digitalWrite(13, HIGH);
   measureSimul(); 
 }
 
@@ -142,11 +146,18 @@ void SendDataTail()
 
 void WaitingForTrigger()
 {
+  buzzOn();
   while(true)
   {
     int16_t triggerAdc = ads.readADC_Differential_0_1();
     if(abs(triggerAdc) > triggerThreshold) break;
   }
+  buzzOff();
+
+  cmdMessenger.printLfCr(false);
+  cmdMessenger.sendCmdStart(kTriggered);
+  cmdMessenger.sendCmdEnd();
+  cmdMessenger.printLfCr(true);
 }
 
 
