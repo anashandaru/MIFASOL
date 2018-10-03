@@ -62,6 +62,8 @@ namespace RefraGama
             // Set if it is communicating with a 16- or 32-bit Arduino board
             _cmdMessenger = new CmdMessenger(_serialTransport, BoardType.Bit16);
 
+
+
             // Clear queues 
             _cmdMessenger.ClearReceiveQueue();
             _cmdMessenger.ClearSendQueue();
