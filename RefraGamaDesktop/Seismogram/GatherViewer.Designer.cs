@@ -35,9 +35,10 @@ namespace RefraGama.Seismogram
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar2 = new DevExpress.XtraBars.Bar();
-            this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonGvFile = new DevExpress.XtraBars.BarButtonItem();
             this.popupMenu1 = new DevExpress.XtraBars.PopupMenu(this.components);
-            this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonGvSave = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonGvOpen = new DevExpress.XtraBars.BarButtonItem();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
@@ -77,10 +78,11 @@ namespace RefraGama.Seismogram
             this.barManager1.DockControls.Add(this.barDockControlRight);
             this.barManager1.Form = this;
             this.barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
-            this.barButtonItem1,
-            this.barButtonItem2});
+            this.barButtonGvFile,
+            this.barButtonGvSave,
+            this.barButtonGvOpen});
             this.barManager1.MainMenu = this.bar2;
-            this.barManager1.MaxItemId = 2;
+            this.barManager1.MaxItemId = 3;
             // 
             // bar2
             // 
@@ -89,32 +91,40 @@ namespace RefraGama.Seismogram
             this.bar2.DockRow = 0;
             this.bar2.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
             this.bar2.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem1)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonGvFile)});
             this.bar2.OptionsBar.MultiLine = true;
             this.bar2.OptionsBar.UseWholeRow = true;
             this.bar2.Text = "Main menu";
             // 
-            // barButtonItem1
+            // barButtonGvFile
             // 
-            this.barButtonItem1.ActAsDropDown = true;
-            this.barButtonItem1.ButtonStyle = DevExpress.XtraBars.BarButtonStyle.DropDown;
-            this.barButtonItem1.Caption = "File";
-            this.barButtonItem1.DropDownControl = this.popupMenu1;
-            this.barButtonItem1.Id = 0;
-            this.barButtonItem1.Name = "barButtonItem1";
+            this.barButtonGvFile.ActAsDropDown = true;
+            this.barButtonGvFile.ButtonStyle = DevExpress.XtraBars.BarButtonStyle.DropDown;
+            this.barButtonGvFile.Caption = "File";
+            this.barButtonGvFile.DropDownControl = this.popupMenu1;
+            this.barButtonGvFile.Id = 0;
+            this.barButtonGvFile.Name = "barButtonGvFile";
             // 
             // popupMenu1
             // 
             this.popupMenu1.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem2)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonGvOpen),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonGvSave)});
             this.popupMenu1.Manager = this.barManager1;
             this.popupMenu1.Name = "popupMenu1";
             // 
-            // barButtonItem2
+            // barButtonGvSave
             // 
-            this.barButtonItem2.Caption = "Export";
-            this.barButtonItem2.Id = 1;
-            this.barButtonItem2.Name = "barButtonItem2";
+            this.barButtonGvSave.Caption = "Save";
+            this.barButtonGvSave.Id = 1;
+            this.barButtonGvSave.Name = "barButtonGvSave";
+            this.barButtonGvSave.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonGvSave_ItemClick);
+            // 
+            // barButtonGvOpen
+            // 
+            this.barButtonGvOpen.Caption = "Open";
+            this.barButtonGvOpen.Id = 2;
+            this.barButtonGvOpen.Name = "barButtonGvOpen";
             // 
             // barDockControlTop
             // 
@@ -175,12 +185,13 @@ namespace RefraGama.Seismogram
         private DevExpress.XtraLayout.LayoutControlGroup layoutControlGroup1;
         private BarManager barManager1;
         private Bar bar2;
-        private BarButtonItem barButtonItem1;
+        private BarButtonItem barButtonGvFile;
         private BarDockControl barDockControlTop;
         private BarDockControl barDockControlBottom;
         private BarDockControl barDockControlLeft;
         private BarDockControl barDockControlRight;
         private PopupMenu popupMenu1;
-        private BarButtonItem barButtonItem2;
+        private BarButtonItem barButtonGvSave;
+        private BarButtonItem barButtonGvOpen;
     }
 }

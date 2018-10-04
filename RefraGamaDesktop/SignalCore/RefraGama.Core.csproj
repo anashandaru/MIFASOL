@@ -46,6 +46,7 @@
     <Compile Include="ISeismicTrace.cs" />
     <Compile Include="ITimeSeries.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SeismicFileHeader\MiniseedHeader.cs" />
     <Compile Include="SeismicStream.cs" />
     <Compile Include="SeismicTrace.cs" />
     <Compile Include="SeismographInfo.cs" />

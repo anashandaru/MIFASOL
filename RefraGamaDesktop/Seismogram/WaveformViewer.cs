@@ -78,11 +78,6 @@ namespace RefraGama.Seismogram
         /// </summary>
         public CutMarkerDrawnHandler OnCutMarkerDrawn;
 
-        /// <summary>
-        /// Get or set wheter the extra bar manager is visible.
-        /// </summary>
-        public bool BarVisible { get { return extraOptionBar.Visible; } set { extraOptionBar.Visible = value; } }
-
         private bool _cutlineActive;
         private float[] _cutlineValue;
         private Cutline _selectedCutline = Cutline.StartLine;
@@ -127,7 +122,6 @@ namespace RefraGama.Seismogram
         public void DeleteWindow(bool enable)
         {
             _delWindowActive = enable;
-            barCheckItem1.Checked = enable;
         }
 
         /// <summary>
@@ -1264,12 +1258,6 @@ namespace RefraGama.Seismogram
             var pointerLocation = (pointerLoc.LocationF.X - 0.06f) / 0.92f;
             var xAxisPosition = pointerLocation * (curXMax - curXMin) + curXMin;
             return xAxisPosition;
-        }
-
-        private void barCheckItem1_CheckedChanged(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            _delWindowActive = barCheckItem1.Checked;
-            
         }
 
         private void barCheckItem1_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)

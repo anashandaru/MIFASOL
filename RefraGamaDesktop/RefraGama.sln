@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefraGama.Seismogram", "Sei
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefraGama.Core", "SignalCore\RefraGama.Core.csproj", "{7906EB3D-9569-47D7-9DA2-A219CEFF26DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Refragama.io", "Refragama.io\Refragama.io.csproj", "{73EF5E78-A6BE-4B50-B4D5-271272196140}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,14 @@ Global
 		{7906EB3D-9569-47D7-9DA2-A219CEFF26DF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7906EB3D-9569-47D7-9DA2-A219CEFF26DF}.Release|x86.ActiveCfg = Release|Any CPU
 		{7906EB3D-9569-47D7-9DA2-A219CEFF26DF}.Release|x86.Build.0 = Release|Any CPU
+		{73EF5E78-A6BE-4B50-B4D5-271272196140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73EF5E78-A6BE-4B50-B4D5-271272196140}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73EF5E78-A6BE-4B50-B4D5-271272196140}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{73EF5E78-A6BE-4B50-B4D5-271272196140}.Debug|x86.Build.0 = Debug|Any CPU
+		{73EF5E78-A6BE-4B50-B4D5-271272196140}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73EF5E78-A6BE-4B50-B4D5-271272196140}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73EF5E78-A6BE-4B50-B4D5-271272196140}.Release|x86.ActiveCfg = Release|Any CPU
+		{73EF5E78-A6BE-4B50-B4D5-271272196140}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

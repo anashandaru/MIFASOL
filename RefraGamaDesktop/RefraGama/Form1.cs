@@ -214,7 +214,7 @@ namespace RefraGama
             ShowWaitForm();
             //btnAutoSearchChannel_Click(null, null);
             barButtonClearMemory_ItemClick(null,null);
-            Thread.Sleep(9000);
+            Thread.Sleep(10000);
             barButtonSetGainArmTrigg_ItemClick(null, null);
             splashScreenManager1.WaitForSplashFormClose();
             ShowSeismogram();

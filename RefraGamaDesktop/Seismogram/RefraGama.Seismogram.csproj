@@ -81,6 +81,10 @@
     <None Include="ILNumerics_deploy\ILNImports2.targets" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Refragama.io\Refragama.io.csproj">
+      <Project>{73ef5e78-a6be-4b50-b4d5-271272196140}</Project>
+      <Name>Refragama.io</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SignalCore\RefraGama.Core.csproj">
       <Project>{7906eb3d-9569-47d7-9da2-a219ceff26df}</Project>
       <Name>RefraGama.Core</Name>

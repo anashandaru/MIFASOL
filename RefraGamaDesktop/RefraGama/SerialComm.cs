@@ -43,6 +43,8 @@ namespace RefraGama
         private List<float> _traceBuffer;
         private ushort _currentChannel;
         private Form1 _form;
+        private DateTime _timeTriggered;
+
         public bool ChannelSearchCompleted { get; private set; }
         public bool IsTriggered { get; private set; }
         public ISeismicStream Gather => GetStream();
@@ -171,6 +173,7 @@ namespace RefraGama
 
         private void OnTriggered(ReceivedCommand arguments)
         {
+            _timeTriggered = DateTime.Now;
             _form.CaptionWaitFor("Recording");
             IsTriggered = true;
             Thread.Sleep(_form.RecordingTime + 100);
@@ -212,7 +215,9 @@ namespace RefraGama
                 {
                     var trace = new SeismicTrace(_traceBuffer.ToArray());
                     trace.Header.Station = _currentChannel.ToString();
-                    trace.Header.SamplingRate = 3750;
+                    trace.Header.ChannelType = ChannelType.Z;
+                    trace.Header.StartTime = _timeTriggered;
+                    //trace.Header.SamplingRate = 3750;
                     _traces.Add(trace);
                     _traceBuffer.Clear();
                 }
