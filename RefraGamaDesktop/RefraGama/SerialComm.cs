@@ -217,7 +217,7 @@ namespace RefraGama
                     trace.Header.Station = _currentChannel.ToString();
                     trace.Header.ChannelType = ChannelType.Z;
                     trace.Header.StartTime = _timeTriggered;
-                    //trace.Header.SamplingRate = 3750;
+                    trace.Header.SamplingRate = 3750;
                     _traces.Add(trace);
                     _traceBuffer.Clear();
                 }

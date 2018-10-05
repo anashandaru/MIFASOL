@@ -113,6 +113,10 @@
       <Project>{3cf8f8fc-6f5c-46f8-94dc-c2e4c505eca4}</Project>
       <Name>CommandMessenger</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Refragama.Signal\Refragama.Signal.csproj">
+      <Project>{1770832f-1925-455b-9ac1-27c9df656b58}</Project>
+      <Name>Refragama.Signal</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Seismogram\RefraGama.Seismogram.csproj">
       <Project>{3b83e309-f3f7-4041-aa17-70fb8a830682}</Project>
       <Name>RefraGama.Seismogram</Name>

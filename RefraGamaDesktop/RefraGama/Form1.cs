@@ -13,6 +13,8 @@ using DevExpress.Data;
 using DevExpress.Utils.Animation;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Repository;
+using Refragama.Signal;
+using Refragama.Signal.Filter;
 using RefraGama.Seismogram;
 
 namespace RefraGama
@@ -201,6 +203,24 @@ namespace RefraGama
 
             if(checkEditDcRemoval.Checked) stream.Detrend();
 
+            if (checkEditBandStop.Checked)
+            {
+                var filter = new ButterworthBandStop((int)spinEditBandStopOrder.Value,(int)spinEditBandStopMin.Value,(int)spinEditBandStopMax.Value);
+                stream.Filter(filter);
+            }
+
+            if (checkEditLowPass.Checked)
+            {
+                var filter = new ButterworthLowPass((int)spinEditLowPassOrder.Value,(float)spinEditLowPass.Value);
+                stream.Filter(filter);
+            }
+
+            if (checkEditHighPass.Checked)
+            {
+                var filter = new ButterworthHighPass((int)spinEditHighPassOrder.Value,(float)spinEditHighPass.Value);
+                stream.Filter(filter);
+            }
+
             var gatherViewer = new GatherViewer(stream);
             gatherViewer.Show();
         }
@@ -240,6 +260,28 @@ namespace RefraGama
         private void barButtonCommTest_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             _serialComm.SetGain(11,4);
+        }
+
+        private void checkEditBandStop_CheckedChanged(object sender, EventArgs e)
+        {
+            var isEnabled = checkEditBandStop.Checked;
+            spinEditBandStopMax.Enabled = isEnabled;
+            spinEditBandStopMin.Enabled = isEnabled;
+            spinEditBandStopOrder.Enabled = isEnabled;
+        }
+
+        private void checkEditLowPass_CheckedChanged(object sender, EventArgs e)
+        {
+            var isEnabled = checkEditLowPass.Checked;
+            spinEditLowPass.Enabled = isEnabled;
+            spinEditLowPassOrder.Enabled = isEnabled;
+        }
+
+        private void checkEditHighPass_CheckedChanged(object sender, EventArgs e)
+        {
+            var isEnabled = checkEditHighPass.Checked;
+            spinEditHighPass.Enabled = isEnabled;
+            spinEditHighPassOrder.Enabled = isEnabled;
         }
     }
 
