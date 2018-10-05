@@ -174,24 +174,15 @@ namespace RefraGama.Core
 
 
         /// <summary>
-        /// Remove a trend from the trace by subtracting a linear function defined by first/last sample of the trace
+        /// Remove a trend from the trace by subtracting a mean value
         /// </summary>
         public void Detrend()
         {
-            //Find equation y = mx + c
-            // Calculating gradient from (x1, y1) and (x2, y2) where x1 = 1.0 and x2 = array length
-            var y1 = _data[0];
-            var y2 = _data[_data.Length - 1];
-            var m = (y2 - y1) / (Data.Length - 1.0f);
+            var average = _data.Average();
 
-            // Calculatin intercept
-            // c = y - mx, we use first point (x1, y1) to substitute
-            var c = y1 - m;
-
-            // Subtract each element with its linear function
-            for (var i = 0; i < _data.Length; i++)
+            for (int i = 0; i < _data.Length; i++)
             {
-                _data[i] -= m * (i + 1) + c;
+                _data[i] -= average;
             }
         }
 

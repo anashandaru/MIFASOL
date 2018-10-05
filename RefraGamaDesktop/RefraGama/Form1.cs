@@ -198,6 +198,9 @@ namespace RefraGama
         private void barButtonSeismogram_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             var stream = _serialComm.Gather;
+
+            if(checkEditDcRemoval.Checked) stream.Detrend();
+
             var gatherViewer = new GatherViewer(stream);
             gatherViewer.Show();
         }
